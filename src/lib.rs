@@ -1,3 +1,5 @@
+use sysinfo::{ComponentExt, System, SystemExt};
+
 /// Returns the current total CPU usage.
 pub fn cpu_usage() -> f32 {
 	todo!()
@@ -9,8 +11,13 @@ pub fn load_average() -> (f32, f32, f32) {
 }
 
 /// Returns the CPU package temperature.
-pub fn cpu_temperature() -> f32 {
-	todo!()
+pub fn cpu_temperature(sys: &System) -> f32 {
+	for com in sys.components() {
+		let temp = com.temperature();
+		println!("{}, {}:", com.label(), temp);
+	}
+
+	0.
 }
 
 /// Returns the command line of top CPU heavy processes.
