@@ -1,6 +1,12 @@
+use sysinfo::{ComponentExt, CpuExt, System, SystemExt};
+
 /// Returns the current total CPU usage.
 pub fn cpu_usage() -> f32 {
-	todo!()
+    let mut sys = System::new_all();
+
+    sys.refresh_all(); // refresh info from cpu
+
+    return sys.global_cpu_info().cpu_usage();
 }
 
 /// Returns the load average in the format reported by `uptime` (1 min, 5 min, 15 min)
