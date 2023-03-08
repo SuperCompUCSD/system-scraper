@@ -1,9 +1,9 @@
 use sysinfo::{System, SystemExt};
-use system_scraper::{cpu_temperature, top_processes};
+use system_scraper::{cpu_temperature, top_processes, ProcessStruct};
 
 fn main() {
 	let mut sys = System::new_all();
-	let mut processes: Vec<(u32, String, f32)>;
+	let mut processes: Vec<ProcessStruct>;
 
 	loop {
 		sys.refresh_all();
@@ -11,10 +11,10 @@ fn main() {
 		//dbg!(cpu_usage());
 		//dbg!(load_average());
 		cpu_temperature(&sys);
-		processes = top_processes(&sys, 5);
+		processes = top_processes(&sys, 3);
 
-		for (pid, name, cpu_usage) in processes {
-			println!("{} {} {}", pid, name, cpu_usage);
+		for process in processes.iter() {
+			println!("{} {} {}", process.pid(), process.name(), process.cpu_usage());
 		}
 		println!();
 
