@@ -1,3 +1,5 @@
+use std::{thread, time::Duration};
+
 use sysinfo::{System, SystemExt};
 use system_scraper::{cpu_temperature, top_processes, ProcessInfo};
 
@@ -9,16 +11,19 @@ fn main() {
 	loop {
 		sys.refresh_all();
 
-		//dbg!(cpu_usage());
-		//dbg!(load_average());
+		// dbg!(cpu_usage());
+		dbg!(sys.load_average());
 		cpu_temperature(&sys);
-		processes = top_processes(&sys, 30);
+		processes = top_processes(&sys, 5);
 
 		for process in processes.iter() {
-			println!("{} {} {}", process.pid, process.name, process.cpu_usage);
+			println!(
+				"Process {} ({}): {}",
+				process.name, process.pid, process.cpu_usage
+			);
 		}
 		println!();
 
-		std::thread::sleep(std::time::Duration::from_millis(1500));
+		thread::sleep(Duration::from_millis(2000));
 	}
 }
