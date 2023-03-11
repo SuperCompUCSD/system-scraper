@@ -1,9 +1,9 @@
 use sysinfo::{System, SystemExt};
-use system_scraper::{cpu_temperature, top_processes, ProcessStruct};
+use system_scraper::{cpu_temperature, top_processes, ProcessInfo};
 
 fn main() {
 	let mut sys = System::new_all();
-	let mut processes: Vec<ProcessStruct>;
+	let mut processes: Vec<ProcessInfo>;
 
 	loop {
 		sys.refresh_all();
