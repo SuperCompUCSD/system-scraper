@@ -20,8 +20,8 @@ pub fn cpu_usage() -> f32 {
 }
 
 /// Returns the load average in the format reported by `uptime` (1 min, 5 min, 15 min)
-pub fn load_average() -> (f32, f32, f32) {
-	todo!()
+pub fn load_average(sys: System) -> sysinfo::LoadAvg {
+	sys.load_average()
 }
 
 /// Returns the CPU package temperature.
