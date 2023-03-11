@@ -1,5 +1,5 @@
-use sysinfo::{ComponentExt, System, SystemExt, PidExt, ProcessExt};
 use std::cmp;
+use sysinfo::{ComponentExt, PidExt, ProcessExt, System, SystemExt};
 
 /// Structure containing
 ///
@@ -8,22 +8,10 @@ use std::cmp;
 /// `name: String`
 ///
 /// `cpu_usage: f32`
-pub struct ProcessStruct{
-	pid: u32,
-	name: String,
-	cpu_usage: f32,
-}
-
-impl ProcessStruct {
-	pub fn pid(&self) -> u32 {
-		self.pid
-	}
-	pub fn name(&self) -> &str {
-		&self.name
-	}
-	pub fn cpu_usage(&self) -> f32 {
-		self.cpu_usage
-	}
+pub struct ProcessStruct {
+	pub pid: u32,
+	pub name: String,
+	pub cpu_usage: f32,
 }
 
 /// Returns the current total CPU usage.
@@ -46,18 +34,16 @@ pub fn cpu_temperature(sys: &System) -> f32 {
 	0.
 }
 
-/// Returns a vector of `ProcessStruct` containing the information of the top n processes by CPU usage.
+/// Returns a vector of `ProcessStruct` containing the information of `min(n, vector.len())`.
 pub fn top_processes(sys: &System, n: u8) -> Vec<ProcessStruct> {
 	let mut processes: Vec<ProcessStruct> = Vec::new();
 
 	for (pid, process) in sys.processes().iter() {
-		if process.cpu_usage() > 0.0 {
-			processes.push(ProcessStruct {
-				pid: pid.as_u32(),
-				name: process.name().to_string(),
-				cpu_usage: process.cpu_usage(),
-			});
-		}
+		processes.push(ProcessStruct {
+			pid: pid.as_u32(),
+			name: process.name().to_string(),
+			cpu_usage: process.cpu_usage(),
+		});
 	}
 
 	processes.sort_by(|a, b| b.cpu_usage.partial_cmp(&a.cpu_usage).unwrap());

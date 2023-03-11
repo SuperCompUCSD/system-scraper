@@ -11,13 +11,13 @@ fn main() {
 		//dbg!(cpu_usage());
 		//dbg!(load_average());
 		cpu_temperature(&sys);
-		processes = top_processes(&sys, 3);
+		processes = top_processes(&sys, 30);
 
 		for process in processes.iter() {
-			println!("{} {} {}", process.pid(), process.name(), process.cpu_usage());
+			println!("{} {} {}", process.pid, process.name, process.cpu_usage);
 		}
 		println!();
 
-		std::thread::sleep(std::time::Duration::from_millis(1000));
+		std::thread::sleep(std::time::Duration::from_millis(1500));
 	}
 }
