@@ -34,7 +34,7 @@ pub fn cpu_temperature(sys: &System) -> f32 {
 	0.
 }
 
-/// Returns a vector of `ProcessStruct` containing the information of `min(n, vector.len())`.
+/// Returns a vector of `ProcessStruct` containing the information of the top `min(n, vector.len())`.
 pub fn top_processes(sys: &System, n: u8) -> Vec<ProcessStruct> {
 	let mut processes: Vec<ProcessStruct> = Vec::new();
 
