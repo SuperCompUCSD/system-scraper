@@ -1,4 +1,4 @@
-use std::{cmp};
+use std::cmp;
 use sysinfo::{ComponentExt, PidExt, ProcessExt, System, SystemExt};
 
 /// Structure containing
