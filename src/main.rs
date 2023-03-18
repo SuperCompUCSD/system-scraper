@@ -14,12 +14,13 @@ use tracing::Level;
 
 #[tokio::main]
 async fn main() {
+    // Add HTTP tracing to the Info level for HTTP requests.
 	tracing_subscriber::fmt()
 		.with_target(false)
 		.with_max_level(Level::INFO)
 		.compact()
 		.init();
-	// build our application with a route
+
 	let app = Router::new().route("/metrics", get(get_metrics)).layer(
 		ServiceBuilder::new().layer(
 			TraceLayer::new_for_http()
@@ -28,8 +29,6 @@ async fn main() {
 		),
 	);
 
-	// run our app with hyper
-	// `axum::Server` is a re-export of `hyper::Server`
 	let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 	tracing::info!("Listening on {addr}");
 	axum::Server::bind(&addr)
