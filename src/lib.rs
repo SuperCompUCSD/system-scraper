@@ -1,4 +1,4 @@
-use std::cmp;
+use std::{cmp, collections::HashMap};
 use sysinfo::{ComponentExt, PidExt, ProcessExt, System, SystemExt};
 
 /// Structure containing
@@ -20,13 +20,11 @@ pub fn cpu_usage() -> f32 {
 }
 
 /// Returns the CPU package temperature.
-pub fn cpu_temperature(sys: &System) -> f32 {
-	for com in sys.components() {
-		let temp = com.temperature();
-		println!("{}, {}:", com.label(), temp);
-	}
-
-	0.
+pub fn cpu_temperature(sys: &System) -> Vec<(&str, f32)> {
+	sys.components()
+		.iter()
+		.map(|component| (component.label(), component.temperature()))
+		.collect()
 }
 
 /// Returns a vector of `ProcessStruct` containing the information of no more than n processes.
