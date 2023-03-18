@@ -61,6 +61,6 @@ async fn get_metrics() -> String {
 		cpu_temperatures,
 	);
 	let mut buffer = String::new();
-	encode(&mut buffer, &registry).expect("Should not have died here!");
+	encode(&mut buffer, &registry).expect("Could not encode registry's metrics");
 	buffer
 }
