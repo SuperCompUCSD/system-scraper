@@ -7,14 +7,14 @@ use prometheus_client::{
 	registry::Registry,
 };
 use sysinfo::{System, SystemExt};
-use system_scraper::cpu_temperature;
+use system_scraper::temperatures;
 use tower::ServiceBuilder;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 
 #[tokio::main]
 async fn main() {
-    // Add HTTP tracing to the Info level for HTTP requests.
+	// Add HTTP tracing to the Info level for HTTP requests.
 	tracing_subscriber::fmt()
 		.with_target(false)
 		.with_max_level(Level::INFO)
@@ -38,7 +38,7 @@ async fn main() {
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq, EncodeLabelSet)]
-struct CPUTempLabels {
+struct TempLabels {
 	core: String,
 }
 
@@ -46,19 +46,19 @@ async fn get_metrics() -> String {
 	let mut sys = System::new_all();
 	sys.refresh_all();
 	let mut registry = Registry::default();
-	let cpu_temperatures = Family::<CPUTempLabels, Gauge<f64, AtomicU64>>::default();
-	let temps = cpu_temperature(&sys);
+	let family = Family::<TempLabels, Gauge<f64, AtomicU64>>::default();
+	let temps = temperatures(&sys);
 	for (label, temp) in temps {
-		cpu_temperatures
-			.get_or_create(&CPUTempLabels {
+		family
+			.get_or_create(&TempLabels {
 				core: label.to_string(),
 			})
 			.set(temp.into());
 	}
 	registry.register(
-		"cpu_temperature",
-		"The temperature for each CPU core",
-		cpu_temperatures,
+		"temperatures",
+		"The temperature for each system component",
+		family,
 	);
 	let mut buffer = String::new();
 	encode(&mut buffer, &registry).expect("could not encode registry's metrics");

@@ -19,8 +19,8 @@ pub fn cpu_usage() -> f32 {
 	todo!()
 }
 
-/// Returns the CPU package temperature.
-pub fn cpu_temperature(sys: &System) -> Vec<(&str, f32)> {
+/// Returns temperatures of system components.
+pub fn temperatures(sys: &System) -> Vec<(&str, f32)> {
 	sys.components()
 		.iter()
 		.map(|component| (component.label(), component.temperature()))
